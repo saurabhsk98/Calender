@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Notifications</title>
+  <style>
+    /* Add your CSS styles here */
+    .notifications {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Employee Notifications</h1>
+
+  <form id="employeeForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+
+    <label for="birthdate">Birthdate:</label>
+    <input type="date" id="birthdate" required>
+
+    <label for="anniversary">Anniversary Date:</label>
+    <input type="date" id="anniversary" required>
+
+    <button type="submit">Add Employee</button>
+  </form>
+
+  <div class="notifications">
+    <h2>Upcoming Events</h2>
+    <div id="presentDayEvents"></div>
+    <div id="nextDayEvents"></div>
+  </div>
+
+  <script>
+    // Function to handle form submission
+    function addEmployee(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get form input values
+      var name = document.getElementById("name").value;
+      var birthdate = document.getElementById("birthdate").value;
+      var anniversary = document.getElementById("anniversary").value;
+
+      // Store employee details in local storage
+      var employee = {
+        name: name,
+        birthdate: birthdate,
+        anniversary: anniversary
+      };
+      localStorage.setItem(name, JSON.stringify(employee));
+
+      // Clear form fields
+      document.getElementById("name").value = "";
+      document.getElementById("birthdate").value = "";
+      document.getElementById("anniversary").value = "";
+
+      // Display upcoming events
+      displayUpcomingEvents();
+    }
+
+    // Function to display upcoming events
+    function displayUpcomingEvents() {
+      var presentDayEventsDiv = document.getElementById("presentDayEvents");
+      presentDayEventsDiv.innerHTML = ""; // Clear previous content
+
+      var nextDayEventsDiv = document.getElementById("nextDayEvents");
+      nextDayEventsDiv.innerHTML = ""; // Clear previous content
+
+      // Get current date and tomorrow's date
+      var currentDate = new Date();
+      var tomorrowDate = new Date();
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
+      // Iterate through stored employees
+      for (var i = 0; i < localStorage.length; i++) {
+        var employee = JSON.parse(localStorage.getItem(localStorage.key(i)));
+
+        // Convert employee dates to Date objects
+        var employeeBirthdate = new Date(employee.birthdate);
+        var employeeAnniversary = new Date(employee.anniversary);
+
+        // Compare employee dates with current and tomorrow's dates
+        if (
+          currentDate.toDateString() === employeeBirthdate.toDateString() ||
+          tomorrowDate.toDateString() === employeeBirthdate.toDateString()
+        ) {
+          // Birthday notification
+          var birthdayMessage = document.createElement("p");
+          birthdayMessage.textContent =
+            employee.name + "'s birthday is today or tomorrow!";
+          presentDayEventsDiv.appendChild(birthdayMessage);
+        }
+
+        if (
+          currentDate.toDateString() === employeeAnniversary.toDateString() ||
+          tomorrowDate.toDateString() === employeeAnniversary.toDateString()
+        ) {
+          // Anniversary notification
+          var anniversaryMessage = document.createElement("p");
+          anniversary
+          Message.textContent =
+employee.name + “’s anniversary is today or tomorrow!”;
+presentDayEventsDiv.appendChild(anniversaryMessage);
+}
+}
+}
+
+// Add event listener to the form submit event
+document.getElementById("employeeForm").addEventListener(
+  "submit",
+  addEmployee
+);
+
+// Display initial upcoming events
+displayUpcomingEvents();
+
+  </script>
+</body>
+</html>
+```
